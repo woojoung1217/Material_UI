@@ -6,9 +6,11 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-
+import { useNavigate } from 'react-router-dom';
 function Header(props) {
   const { sections, title } = props;
+
+  const navigate = useNavigate()
 
   return (
     <React.Fragment>
@@ -27,9 +29,13 @@ function Header(props) {
         <IconButton>
           <SearchIcon />
         </IconButton>
-        <Button variant="outlined" size="small">
+        <Link variant="outlined" size="small"
+          onClick={() => {
+            navigate("/login")
+          }}
+        >
           Sign up
-        </Button>
+        </Link>
       </Toolbar>
       <Toolbar
         component="nav"
@@ -49,7 +55,7 @@ function Header(props) {
           </Link>
         ))}
       </Toolbar>
-    </React.Fragment>
+    </React.Fragment >
   );
 }
 
