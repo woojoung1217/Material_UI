@@ -1,42 +1,43 @@
 
 
 /* eslint-disable  */
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React from 'react';
+
+import { useState, useEffect } from 'react';
 import Blog from './components/Blog';
 import { Route, Routes } from 'react-router-dom';
 import Login2 from './components/Login';
-
-
+import { createClient } from '@supabase/supabase-js'
+import { Auth } from '@supabase/auth-ui-react'
+import { ThemeSupa } from '@supabase/auth-ui-shared'
+import Animation from './components/Animation';
+import axios from 'axios';
+import DetailPage from './components/DetailPage';
 
 
 
 function App() {
 
+  const [fetchData, setFetchData] = useState([])
+  const BaseURL = "https://test.api.weniv.co.kr/mall"
+  useEffect(() => {
+    axios.get(BaseURL)
+      .then((response) => {
+        setFetchData(response.data);
+      })
+      .catch((error) => {
+        console.error('데이터를 불러오는 중 에러 발생:', error);
+      });
+  }, []);
 
   return (
-    <div>
-
-      <Routes>
-        <Route path="/" element={<Blog></Blog>}></Route>
-        <Route path='/login' element={<Login2></Login2>}></Route>
-      </Routes>
-
-
-    </div>
-  );
+    <Routes>
+      <Route path="/" element={<Blog></Blog>}></Route>
+      <Route path='/detail' element={<DetailPage></DetailPage>}></Route>
+      <Route path='/login' element={<Login2></Login2>}></Route>
+      <Route path='/animation' element={<Animation></Animation>}></Route>
+    </Routes>
+  )
 }
 
 export default App;
