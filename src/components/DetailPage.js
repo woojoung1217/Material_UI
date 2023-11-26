@@ -2,12 +2,15 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@mui/material/Container';
 import axios from 'axios';
+import { Link, Route, Routes, useParams } from 'react-router-dom';
+import MoreDetail from './MoreDetail';
+const DetailPage = ({ fetchData, setFetchData }) => {
 
-const DetailPage = () => {
-  const [fetchData, setFetchData] = useState([]);
+
+
   const [selectedItems, setSelectedItems] = useState([]);
   const [likeItems, setLikeItems] = useState([]);
-  const BaseURL = "https://test.api.weniv.co.kr/mall";
+
 
   // 체크박스 변경 시 호출되는 함수
   const handleCheckboxChange = (productId) => {
@@ -42,16 +45,6 @@ const DetailPage = () => {
     regercy();
   }, [selectedItems]);
 
-  useEffect(() => {
-    axios.get(BaseURL)
-      .then((response) => {
-        setFetchData(response.data);
-      })
-      .catch((error) => {
-        console.error('데이터를 불러오는 중 에러 발생:', error);
-      });
-  }, []);
-
 
   /**관심품목에 totalprice 를 구해주는 함수 */
   const getTotalPrice = () => {
@@ -61,14 +54,16 @@ const DetailPage = () => {
 
   return (
     <Container style={{ marginTop: "30px" }}>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "50px", justifyContent: "center", alignItems: "center" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "30px", justifyContent: "center", alignItems: "center" }}>
         {fetchData.map((item) => (
-          <div key={item.id}>
+          <div key={item.id} style={{ textDecoration: "none", color: "#000" }}>
             <div key={item.id}>
-              <img src={`${"https://test.api.weniv.co.kr/"}${item.thumbnailImg}`} style={{ width: "300px", height: "300px", backgroundPosition: "center", border: "1px solid", boxSizing: "border-box", borderRadius: "10px" }} alt={item.productName} />
+              <Link to={`/MoreDetail/${item.id}`} style={{ textDecoration: 'none', color: "#000" }}>
+                <img src={`${"https://test.api.weniv.co.kr/"}${item.thumbnailImg}`} style={{ width: "300px", height: "300px", backgroundPosition: "center", border: "1px solid", boxSizing: "border-box", borderRadius: "10px" }} alt={item.productName} />
+              </Link>
               <div>{item.id}</div>
-              <div>{item.price}</div>
-              <label style={{ fontSize: "1rem" }}>❤️</label>
+              <div>{item.price.toLocaleString('en-US', { style: 'currency', currency: 'KRW' })}원</div>
+              <label style={{ fontSize: "1rem" }}>관심</label>
               <input
                 type="checkbox"
                 onChange={() => handleCheckboxChange(item.id)}
@@ -78,7 +73,10 @@ const DetailPage = () => {
           </div>
         ))}
       </div>
-      <div >
+
+
+
+      <div className='관심품목' >
         <p style={{ padding: '10px ' }}>관심품목</p>
         <ul style={{ display: "flex", gap: "20px", listStyle: "none", flexDirection: "column" }}>
           {likeItems.map((likeItem) => (
@@ -88,7 +86,7 @@ const DetailPage = () => {
             </div>
           ))}
           <div>{likeItems.length > 0 ? (
-            <div>TOTAL : {getTotalPrice()} 원</div>
+            <div className='hover-element'>TOTAL : {getTotalPrice()} 원</div>
           ) : <div></div>}</div>
         </ul>
 

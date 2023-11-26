@@ -13,13 +13,17 @@ import { ThemeSupa } from '@supabase/auth-ui-shared'
 import Animation from './components/Animation';
 import axios from 'axios';
 import DetailPage from './components/DetailPage';
+import MoreDetail from './components/MoreDetail';
 
 
 
 function App() {
 
-  const [fetchData, setFetchData] = useState([])
-  const BaseURL = "https://test.api.weniv.co.kr/mall"
+
+  const [fetchData, setFetchData] = useState([]);
+  const BaseURL = "https://test.api.weniv.co.kr/mall";
+
+
   useEffect(() => {
     axios.get(BaseURL)
       .then((response) => {
@@ -30,12 +34,15 @@ function App() {
       });
   }, []);
 
+
   return (
     <Routes>
       <Route path="/" element={<Blog></Blog>}></Route>
-      <Route path='/detail' element={<DetailPage></DetailPage>}></Route>
       <Route path='/login' element={<Login2></Login2>}></Route>
       <Route path='/animation' element={<Animation></Animation>}></Route>
+      <Route path='/detail' element={<DetailPage fetchData={fetchData} setFetchData={setFetchData}></DetailPage>}></Route>
+      <Route path='/MoreDetail/:id' element={<MoreDetail fetchData={fetchData} />}></Route>
+
     </Routes>
   )
 }
